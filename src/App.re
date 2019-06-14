@@ -1,6 +1,2 @@
-
 [@react.component]
-let make = _ =>
-  <div>
-    {ReasonReact.string("hello world")}
-  </div>;
+let make = _ => <div> <Select values=["one", "two", "three"] /> </div>;

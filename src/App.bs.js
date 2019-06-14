@@ -2,9 +2,21 @@
 'use strict';
 
 var React = require("react");
+var Select$ReactHooksTemplate = require("./Select.bs.js");
 
 function App(Props) {
-  return React.createElement("div", undefined, "hello world");
+  return React.createElement("div", undefined, React.createElement(Select$ReactHooksTemplate.make, {
+                  values: /* :: */[
+                    "one",
+                    /* :: */[
+                      "two",
+                      /* :: */[
+                        "three",
+                        /* [] */0
+                      ]
+                    ]
+                  ]
+                }));
 }
 
 var make = App;
