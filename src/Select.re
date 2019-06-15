@@ -26,7 +26,7 @@ module Menu = {
   [@react.component]
   let make = (~children, ~hide) =>
     hide
-      ? <div className="absolute bg-green-200 w-full"> children </div>
+      ? <div className="absolute bg-green-200 w-full z-10"> children </div>
       : React.null;
 };
 

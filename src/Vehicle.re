@@ -13,7 +13,6 @@ module Decode = {
       speed: json |> field("speed", int),
       total_no: json |> field("total_no", int),
     };
-
   let vehicleList = vehicle |> Json.Decode.list;
 };
 
@@ -26,9 +25,13 @@ module Api = {
 };
 
 [@react.component]
-let make = (~name, ~count, ~active, ~onClick) =>
-  <div className="cursor-pointer" onClick>
-    <Icon.Radio active />
+let make = (~name, ~count, ~disable, ~selected, ~onClick) => {
+  let className =
+    disable ? "cursor-move pointer-events-none opacity-25" : "cursor-pointer";
+
+  <div className onClick>
+    <Icon.Radio active=selected />
     <span> {React.string(name)} </span>
-    <span> {React.string(" ( " ++ count ++ " )")} </span>
+    <span> {React.string(" ( " ++ string_of_int(count) ++ " )")} </span>
   </div>;
+};

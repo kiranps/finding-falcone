@@ -33,6 +33,24 @@ let updateArray = (value, index, arr) => {
   arr;
 };
 
+let getValueOrDefault = (dict, key, default) =>
+  switch (Js.Dict.get(dict, key)) {
+  | Some(value) => value
+  | None => default
+  };
+
+let planetDistance = (planet, planets) => {
+  planets
+  |> List.find((x: Planet.t) => x.name === planet)
+  |> (
+    result =>
+      switch (result) {
+      | planet => planet.distance
+      | exception Not_found => 0
+      }
+  );
+};
+
 [@react.component]
 let make = _ => {
   let (vehicles, setVehicles) = React.useState(_ => []);
@@ -79,6 +97,27 @@ let make = _ => {
     ();
   };
 
+  let vehiclesUsed = key => {
+    let counter = Js.Dict.empty();
+    let _ =
+      missions
+      |> List.iter(mission =>
+           switch (mission) {
+           | Some(mission) =>
+             Js.Dict.set(
+               counter,
+               mission.vehicle,
+               getValueOrDefault(counter, mission.vehicle, 0) + 1,
+             )
+           | None => ()
+           }
+         );
+    switch (Js.Dict.get(counter, key)) {
+    | Some(int) => int
+    | None => 0
+    };
+  };
+
   <Lengaburu>
     <SpaceStation>
       {missions
@@ -100,8 +139,14 @@ let make = _ => {
                       <Vehicle
                         key={string_of_int(j)}
                         name={vehicle.name}
-                        count={string_of_int(vehicle.total_no)}
-                        active={mission.vehicle == vehicle.name}
+                        count={vehicle.total_no - vehiclesUsed(vehicle.name)}
+                        disable={
+                          vehicle.total_no
+                          - vehiclesUsed(vehicle.name) == 0
+                          || vehicle.max_distance
+                          < planetDistance(mission.planet, planets)
+                        }
+                        selected={mission.vehicle == vehicle.name}
                         onClick={_ => selectVehicle(vehicle.name, i)}
                       />
                     )
