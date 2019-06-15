@@ -24,17 +24,24 @@ module Menu = {
   };
 
   [@react.component]
-  let make = (~children, ~hide) => hide ? <div> children </div> : React.null;
+  let make = (~children, ~hide) =>
+    hide
+      ? <div className="absolute bg-green-200 w-full"> children </div>
+      : React.null;
 };
 
 module Box = {
   [@react.component]
   let make = (~children) =>
-    <div className="bg-green-100 w-40"> children </div>;
+    <div className="inline-block relative bg-green-100 w-40"> children </div>;
+};
+module Container = {
+  [@react.component]
+  let make = (~children) => <div className="block w-full"> children </div>;
 };
 
 [@react.component]
-let make = (~values: list(string)) => {
+let make = (~values: list(string), ~onChange) => {
   let (active, toggleActive) = React.useState(_ => false);
   let (value, changeValue) = React.useState(_ => "");
 
@@ -58,24 +65,30 @@ let make = (~values: list(string)) => {
 
   let handleSelect = value => {
     changeValue(_ => value);
-    Js.log("select");
-    Js.log(value);
+    onChange(value);
   };
 
   <Box>
-    <Input value onBlur=handleBlur onClick=handleClick onChange=handleChange />
-    <Menu hide=active>
-      {values
-       |> List.filter(Js.String.startsWith(value))
-       |> List.mapi((i, x) =>
-            <Menu.Item
-              key={string_of_int(i)}
-              value=x
-              onClick={_e => handleSelect(x)}
-            />
-          )
-       |> Array.of_list
-       |> React.array}
-    </Menu>
+    <Container>
+      <Input
+        value
+        onBlur=handleBlur
+        onClick=handleClick
+        onChange=handleChange
+      />
+      <Menu hide=active>
+        {values
+         |> List.filter(Js.String.startsWith(value))
+         |> List.mapi((i, x) =>
+              <Menu.Item
+                key={string_of_int(i)}
+                value=x
+                onClick={_e => handleSelect(x)}
+              />
+            )
+         |> Array.of_list
+         |> React.array}
+      </Menu>
+    </Container>
   </Box>;
 };

@@ -20,7 +20,19 @@ module Decode = {
 module Api = {
   let fetchVehicles = () =>
     Js.Promise.(
-      Http.get("https://findfalcone.herokuapp.com/vehicles")
+      Http.get("/vehicles")
       |> then_(json => json |> Decode.vehicleList |> resolve)
     );
 };
+
+[@react.component]
+let make = (~data: t) =>
+  <div className="cursor-pointer">
+    <Icon.Radio active=false />
+    <span> {React.string(data.name)} </span>
+    <span>
+      {data.total_no
+       |> string_of_int
+       |> (count => "(" ++ count ++ ")" |> React.string)}
+    </span>
+  </div>;

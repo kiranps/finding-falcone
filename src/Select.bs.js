@@ -39,7 +39,9 @@ function Select$Menu(Props) {
   var children = Props.children;
   var hide = Props.hide;
   if (hide) {
-    return React.createElement("div", undefined, children);
+    return React.createElement("div", {
+                className: "absolute bg-green-200 w-full"
+              }, children);
   } else {
     return null;
   }
@@ -53,14 +55,24 @@ var Menu = /* module */[
 function Select$Box(Props) {
   var children = Props.children;
   return React.createElement("div", {
-              className: "bg-green-100 w-40"
+              className: "inline-block relative bg-green-100 w-40"
             }, children);
 }
 
 var Box = /* module */[/* make */Select$Box];
 
+function Select$Container(Props) {
+  var children = Props.children;
+  return React.createElement("div", {
+              className: "block w-full"
+            }, children);
+}
+
+var Container = /* module */[/* make */Select$Container];
+
 function Select(Props) {
   var values = Props.values;
+  var onChange = Props.onChange;
   var match = React.useState((function () {
           return false;
         }));
@@ -95,32 +107,31 @@ function Select(Props) {
     return /* () */0;
   };
   return React.createElement(Select$Box, {
-              children: null
-            }, React.createElement(Select$Input, {
-                  value: value,
-                  onBlur: handleBlur,
-                  onClick: handleClick,
-                  onChange: handleChange
-                }), React.createElement(Select$Menu, {
-                  children: $$Array.of_list(List.mapi((function (i, x) {
-                              return React.createElement(Select$Menu$Item, {
-                                          value: x,
-                                          onClick: (function (_e) {
-                                              var value = x;
-                                              Curry._1(changeValue, (function (param) {
-                                                      return value;
-                                                    }));
-                                              console.log("select");
-                                              console.log(value);
-                                              return /* () */0;
-                                            }),
-                                          key: String(i)
-                                        });
-                            }), List.filter((function (param) {
-                                    return param.startsWith(value);
-                                  }))(values))),
-                  hide: active
-                }));
+              children: React.createElement(Select$Container, {
+                    children: null
+                  }, React.createElement(Select$Input, {
+                        value: value,
+                        onBlur: handleBlur,
+                        onClick: handleClick,
+                        onChange: handleChange
+                      }), React.createElement(Select$Menu, {
+                        children: $$Array.of_list(List.mapi((function (i, x) {
+                                    return React.createElement(Select$Menu$Item, {
+                                                value: x,
+                                                onClick: (function (_e) {
+                                                    Curry._1(changeValue, (function (param) {
+                                                            return x;
+                                                          }));
+                                                    return Curry._1(onChange, x);
+                                                  }),
+                                                key: String(i)
+                                              });
+                                  }), List.filter((function (param) {
+                                          return param.startsWith(value);
+                                        }))(values))),
+                        hide: active
+                      }))
+            });
 }
 
 var make = Select;
@@ -128,5 +139,6 @@ var make = Select;
 exports.Input = Input;
 exports.Menu = Menu;
 exports.Box = Box;
+exports.Container = Container;
 exports.make = make;
 /* react Not a pure module */

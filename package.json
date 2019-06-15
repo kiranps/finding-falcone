@@ -16,7 +16,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@glennsl/bs-json": "^4.0.0",
     "bs-css": "^8.0.4",
+    "bs-fetch": "^0.4.0",
     "css-loader": "^3.0.0",
     "postcss-loader": "^3.0.0",
     "react": "^16.8.1",
