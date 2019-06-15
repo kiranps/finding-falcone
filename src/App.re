@@ -9,7 +9,7 @@ module FindFalcone = {
 };
 
 type mission = {
-  vehicle: string,
+  vehicle: option(string),
   planet: string,
 };
 
@@ -51,6 +51,42 @@ let planetDistance = (planet, planets) => {
   );
 };
 
+let vehicleSpeed = (vehicleName, vehicles) => {
+  vehicles
+  |> List.find((x: Vehicle.t) => x.name === vehicleName)
+  |> (
+    result =>
+      switch (result) {
+      | vehicle => Some(vehicle.speed)
+      | exception Not_found => None
+      }
+  );
+};
+let vehiclesUsed = (missions, key) => {
+  let counter = Js.Dict.empty();
+  let _ =
+    missions
+    |> List.iter(mission =>
+         switch (mission) {
+         | Some(mission) =>
+           switch (mission.vehicle) {
+           | Some(vehicle) =>
+             Js.Dict.set(
+               counter,
+               vehicle,
+               getValueOrDefault(counter, vehicle, 0) + 1,
+             )
+           | None => ()
+           }
+         | None => ()
+         }
+       );
+  switch (Js.Dict.get(counter, key)) {
+  | Some(int) => int
+  | None => 0
+  };
+};
+
 [@react.component]
 let make = _ => {
   let (vehicles, setVehicles) = React.useState(_ => []);
@@ -73,7 +109,7 @@ let make = _ => {
     let _ =
       missions
       |> Array.of_list
-      |> updateArray(Some({planet: value, vehicle: ""}), i)
+      |> updateArray(Some({planet: value, vehicle: None}), i)
       |> Array.to_list
       |> (values => setMission(_ => values));
     ();
@@ -97,26 +133,26 @@ let make = _ => {
     ();
   };
 
-  let vehiclesUsed = key => {
-    let counter = Js.Dict.empty();
-    let _ =
-      missions
-      |> List.iter(mission =>
+  let totalTimeTaken =
+    missions
+    |> List.fold_left(
+         (total, mission) =>
            switch (mission) {
            | Some(mission) =>
-             Js.Dict.set(
-               counter,
-               mission.vehicle,
-               getValueOrDefault(counter, mission.vehicle, 0) + 1,
-             )
-           | None => ()
-           }
-         );
-    switch (Js.Dict.get(counter, key)) {
-    | Some(int) => int
-    | None => 0
-    };
-  };
+             switch (mission.vehicle) {
+             | Some(vehicle) =>
+               switch (vehicleSpeed(vehicle, vehicles)) {
+               | Some(speed) =>
+                 total + planetDistance(mission.planet, planets) / speed
+               | None => total
+               }
+             | None => total
+             }
+           | None => total
+           },
+         0,
+       )
+    |> string_of_int;
 
   <Lengaburu>
     <SpaceStation>
@@ -139,15 +175,23 @@ let make = _ => {
                       <Vehicle
                         key={string_of_int(j)}
                         name={vehicle.name}
-                        count={vehicle.total_no - vehiclesUsed(vehicle.name)}
+                        count={
+                          vehicle.total_no
+                          - vehiclesUsed(missions, vehicle.name)
+                        }
                         disable={
                           vehicle.total_no
-                          - vehiclesUsed(vehicle.name) == 0
+                          - vehiclesUsed(missions, vehicle.name) == 0
                           || vehicle.max_distance
                           < planetDistance(mission.planet, planets)
                         }
-                        selected={mission.vehicle == vehicle.name}
-                        onClick={_ => selectVehicle(vehicle.name, i)}
+                        selected={
+                          switch (mission.vehicle) {
+                          | Some(name) => name == vehicle.name
+                          | None => false
+                          }
+                        }
+                        onClick={_ => selectVehicle(Some(vehicle.name), i)}
                       />
                     )
                  |> Array.of_list
@@ -159,6 +203,7 @@ let make = _ => {
        |> Array.of_list
        |> React.array}
     </SpaceStation>
+    <div> {React.string(totalTimeTaken)} </div>
     <FindFalcone />
   </Lengaburu>;
 };
