@@ -35,3 +35,15 @@ let make = (~name, ~count, ~disable, ~selected, ~onClick) => {
     <span> {React.string(" ( " ++ string_of_int(count) ++ " )")} </span>
   </div>;
 };
+
+let speed = (vehicleName, vehicles) => {
+  vehicles
+  |> List.find(x => x.name === vehicleName)
+  |> (
+    result =>
+      switch (result) {
+      | vehicle => Some(vehicle.speed)
+      | exception Not_found => None
+      }
+  );
+};

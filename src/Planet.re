@@ -20,3 +20,15 @@ module Api = {
       |> then_(json => json |> Decode.planetList |> resolve)
     );
 };
+
+let distance = (planet, planets) => {
+  planets
+  |> List.find(x => x.name === planet)
+  |> (
+    result =>
+      switch (result) {
+      | planet => planet.distance
+      | exception Not_found => 0
+      }
+  );
+};

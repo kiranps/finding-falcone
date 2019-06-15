@@ -1,4 +1,8 @@
 open Js.Promise;
+type mission = {
+  vehicle: option(string),
+  planet: string,
+};
 
 module FindFalcone = {
   [@react.component]
@@ -6,11 +10,6 @@ module FindFalcone = {
     <button className="outline-none block">
       {React.string("Find Falcone")}
     </button>;
-};
-
-type mission = {
-  vehicle: option(string),
-  planet: string,
 };
 
 module LaunchPad = {
@@ -39,29 +38,6 @@ let getValueOrDefault = (dict, key, default) =>
   | None => default
   };
 
-let planetDistance = (planet, planets) => {
-  planets
-  |> List.find((x: Planet.t) => x.name === planet)
-  |> (
-    result =>
-      switch (result) {
-      | planet => planet.distance
-      | exception Not_found => 0
-      }
-  );
-};
-
-let vehicleSpeed = (vehicleName, vehicles) => {
-  vehicles
-  |> List.find((x: Vehicle.t) => x.name === vehicleName)
-  |> (
-    result =>
-      switch (result) {
-      | vehicle => Some(vehicle.speed)
-      | exception Not_found => None
-      }
-  );
-};
 let vehiclesUsed = (missions, key) => {
   let counter = Js.Dict.empty();
   let _ =
@@ -141,9 +117,9 @@ let make = _ => {
            | Some(mission) =>
              switch (mission.vehicle) {
              | Some(vehicle) =>
-               switch (vehicleSpeed(vehicle, vehicles)) {
+               switch (Vehicle.speed(vehicle, vehicles)) {
                | Some(speed) =>
-                 total + planetDistance(mission.planet, planets) / speed
+                 total + Planet.distance(mission.planet, planets) / speed
                | None => total
                }
              | None => total
@@ -154,20 +130,28 @@ let make = _ => {
        )
     |> string_of_int;
 
+  let remainingPlanets =
+    Utils.difference(
+      List.map((planet: Planet.t) => planet.name, planets),
+      missions
+      |> List.filter(x => x !== None)
+      |> List.map(mission =>
+           switch (mission) {
+           | Some(mission) => mission.planet
+           | None => ""
+           }
+         ),
+    );
+
   <Lengaburu>
     <SpaceStation>
       {missions
        |> List.mapi((i, mission) =>
             <LaunchPad key={string_of_int(i)}>
-              {planets
-               |> List.map((planet: Planet.t) => planet.name)
-               |> (
-                 values =>
-                   <Select
-                     values
-                     onChange={value => selectPlanet(value, i)}
-                   />
-               )}
+              <Select
+                values=remainingPlanets
+                onChange={value => selectPlanet(value, i)}
+              />
               {switch (mission) {
                | Some(mission) =>
                  vehicles
@@ -183,7 +167,7 @@ let make = _ => {
                           vehicle.total_no
                           - vehiclesUsed(missions, vehicle.name) == 0
                           || vehicle.max_distance
-                          < planetDistance(mission.planet, planets)
+                          < Planet.distance(mission.planet, planets)
                         }
                         selected={
                           switch (mission.vehicle) {
