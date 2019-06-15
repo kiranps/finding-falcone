@@ -20,6 +20,10 @@ module LaunchPad = {
 
 module Lengaburu = {
   [@react.component]
+  let make = (~children) => <div className=""> children </div>;
+};
+module SpaceStation = {
+  [@react.component]
   let make = (~children) =>
     <div className="flex items-start"> children </div>;
 };
@@ -36,7 +40,6 @@ let make = _ => {
   let (missions, setMission) = React.useState(_ => [None, None, None, None]);
 
   React.useEffect0(() => {
-    Js.log("didMount");
     let _ =
       Planet.Api.fetchPlanets()
       |> then_(json => json |> (json => setPlanets(_ => json)) |> resolve);
@@ -48,7 +51,7 @@ let make = _ => {
     Some(() => ());
   });
 
-  let handleSelect = (value, i) => {
+  let selectPlanet = (value, i) => {
     let _ =
       missions
       |> Array.of_list
@@ -58,32 +61,59 @@ let make = _ => {
     ();
   };
 
-  let _ = Js.log("render");
+  let selectVehicle = (value, i) => {
+    let _ =
+      missions
+      |> Array.of_list
+      |> (
+        values => {
+          switch (values[i]) {
+          | Some(mission) =>
+            updateArray(Some({...mission, vehicle: value}), i, values)
+          | None => values
+          };
+        }
+      )
+      |> Array.to_list
+      |> (values => setMission(_ => values));
+    ();
+  };
 
   <Lengaburu>
-    {missions
-     |> List.mapi((i, mission) =>
-          <LaunchPad key={string_of_int(i)}>
-            {planets
-             |> List.map((planet: Planet.t) => planet.name)
-             |> (
-               values =>
-                 <Select values onChange={value => handleSelect(value, i)} />
-             )}
-            {switch (mission) {
-             | Some(x) =>
-               vehicles
-               |> List.mapi((i, vehicle: Vehicle.t) =>
-                    <Vehicle key={string_of_int(i)} data=vehicle />
-                  )
-               |> Array.of_list
-               |> React.array
-             | None => React.null
-             }}
-          </LaunchPad>
-        )
-     |> Array.of_list
-     |> React.array}
+    <SpaceStation>
+      {missions
+       |> List.mapi((i, mission) =>
+            <LaunchPad key={string_of_int(i)}>
+              {planets
+               |> List.map((planet: Planet.t) => planet.name)
+               |> (
+                 values =>
+                   <Select
+                     values
+                     onChange={value => selectPlanet(value, i)}
+                   />
+               )}
+              {switch (mission) {
+               | Some(mission) =>
+                 vehicles
+                 |> List.mapi((j, vehicle: Vehicle.t) =>
+                      <Vehicle
+                        key={string_of_int(j)}
+                        name={vehicle.name}
+                        count={string_of_int(vehicle.total_no)}
+                        active={mission.vehicle == vehicle.name}
+                        onClick={_ => selectVehicle(vehicle.name, i)}
+                      />
+                    )
+                 |> Array.of_list
+                 |> React.array
+               | None => React.null
+               }}
+            </LaunchPad>
+          )
+       |> Array.of_list
+       |> React.array}
+    </SpaceStation>
     <FindFalcone />
   </Lengaburu>;
 };

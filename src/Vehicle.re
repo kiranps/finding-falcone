@@ -26,13 +26,9 @@ module Api = {
 };
 
 [@react.component]
-let make = (~data: t) =>
-  <div className="cursor-pointer">
-    <Icon.Radio active=false />
-    <span> {React.string(data.name)} </span>
-    <span>
-      {data.total_no
-       |> string_of_int
-       |> (count => "(" ++ count ++ ")" |> React.string)}
-    </span>
+let make = (~name, ~count, ~active, ~onClick) =>
+  <div className="cursor-pointer" onClick>
+    <Icon.Radio active />
+    <span> {React.string(name)} </span>
+    <span> {React.string(" ( " ++ count ++ " )")} </span>
   </div>;
