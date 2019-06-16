@@ -2,6 +2,18 @@ type payload = {
   planet_names: list(string),
   vehicle_names: list(string),
 };
+type payloadResult = {
+  planet_name: option(string),
+  status: string,
+};
+
+module Decode = {
+  let payload = json =>
+    Json.Decode.{
+      planet_name: json |> field("planet_name", optional(string)),
+      status: json |> field("status", string),
+    };
+};
 
 module Encode = {
   open Json.Encode;
@@ -24,7 +36,11 @@ module Api = {
       |> then_((json: Auth.t) =>
            payload
            |> Encode.falconePayload(json.token)
-           |> Http.post("https://findfalcone.herokuapp.com/find")
+           |> (
+             data =>
+               Http.post("https://findfalcone.herokuapp.com/find", data)
+               |> then_(json => json |> Decode.payload |> resolve)
+           )
          )
     );
 };
