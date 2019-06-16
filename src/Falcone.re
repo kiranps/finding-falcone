@@ -10,7 +10,7 @@ type payloadResult = {
 module Decode = {
   let payload = json =>
     Json.Decode.{
-      planet_name: json |> field("planet_name", optional(string)),
+      planet_name: json |> optional(field("planet_name", string)),
       status: json |> field("status", string),
     };
 };
@@ -44,4 +44,3 @@ module Api = {
          )
     );
 };
-/* Http.post("https://findfalcone.herokuapp.com/find") */
