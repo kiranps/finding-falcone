@@ -16,7 +16,7 @@ module Decode = {
 module Api = {
   let fetchPlanets = () =>
     Js.Promise.(
-      Http.get("/planets")
+      Http.get("https://findfalcone.herokuapp.com/planets")
       |> then_(json => json |> Decode.planetList |> resolve)
     );
 };
