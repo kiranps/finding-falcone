@@ -6,10 +6,12 @@ type mission = {
 
 module FindFalcone = {
   [@react.component]
-  let make = _ =>
-    <button className="outline-none block">
-      {React.string("Find Falcone")}
-    </button>;
+  let make = (~disabled, ~onClick) => {
+    let className =
+      disabled ? "pointer-events-none opacity-25" : "outline-none block";
+
+    <button className onClick> {React.string("Find Falcone")} </button>;
+  };
 };
 
 module LaunchPad = {
@@ -80,6 +82,45 @@ let make = _ => {
 
     Some(() => ());
   });
+
+  let isReadyToLaunch =
+    missions
+    |> List.for_all(mission =>
+         switch (mission) {
+         | Some(mission) =>
+           switch (mission.vehicle) {
+           | Some(vehicle) => true
+           | None => false
+           }
+         | None => false
+         }
+       );
+
+  let launchVehicles = _ => {
+    let initialPayload: Falcone.payload = {
+      planet_names: [],
+      vehicle_names: [],
+    };
+    missions
+    |> List.fold_left(
+         (payload: Falcone.payload, mission) =>
+           switch (mission) {
+           | Some(mission) =>
+             switch (mission.vehicle) {
+             | Some(vehicle) => {
+                 vehicle_names: [vehicle, ...payload.vehicle_names],
+                 planet_names: [mission.planet, ...payload.planet_names],
+               }
+
+             | None => payload
+             }
+           | None => payload
+           },
+         initialPayload,
+       )
+    |> Falcone.Api.findFalcone;
+    ();
+  };
 
   let selectPlanet = (value, i) => {
     let _ =
@@ -188,6 +229,6 @@ let make = _ => {
        |> React.array}
     </SpaceStation>
     <div> {React.string(totalTimeTaken)} </div>
-    <FindFalcone />
+    <FindFalcone disabled={!isReadyToLaunch} onClick=launchVehicles />
   </Lengaburu>;
 };
