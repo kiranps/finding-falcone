@@ -6,7 +6,7 @@ let make = _ => {
   let planet = Utils.qsGet("planet");
   let time = Utils.qsGet("time");
 
-  <div>
+  <div className="text-center">
     {switch (status) {
      | Some("success") =>
        <div>
@@ -28,5 +28,6 @@ let make = _ => {
      | None =>
        <div> {React.string("Error! Something Unexpected happened")} </div>
      }}
+    <a href="#/home" className="btn-blue"> {React.string("Start Again")} </a>
   </div>;
 };

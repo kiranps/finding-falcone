@@ -4,14 +4,16 @@ type mission = {
   planet: string,
 };
 
-module FindFalcone = {
+module Lengaburu = {
   [@react.component]
-  let make = (~disabled, ~onClick) => {
-    let className =
-      disabled ? "pointer-events-none opacity-25" : "outline-none block";
-
-    <button className onClick> {React.string("Find Falcone")} </button>;
-  };
+  let make = (~children) =>
+    <div className="flex flex-col justify-center items-center pt-40">
+      children
+    </div>;
+};
+module SpaceStation = {
+  [@react.component]
+  let make = (~children) => <div className="flex h-40 w-3/4"> children </div>;
 };
 
 module LaunchPad = {
@@ -19,14 +21,23 @@ module LaunchPad = {
   let make = (~children) => <div className="flex-1"> children </div>;
 };
 
-module Lengaburu = {
+module TimeTaken = {
   [@react.component]
-  let make = (~children) => <div className=""> children </div>;
+  let make = (~label) =>
+    <div className="text-center h-12">
+      {React.string("Time taken " ++ label)}
+    </div>;
 };
-module SpaceStation = {
+
+module FindFalcone = {
   [@react.component]
-  let make = (~children) =>
-    <div className="flex items-start"> children </div>;
+  let make = (~disabled, ~onClick) => {
+    let className =
+      disabled
+        ? "btn-blue pointer-events-none opacity-25" : "btn-blue outline-none";
+
+    <button className onClick> {React.string("Find Falcone")} </button>;
+  };
 };
 
 let updateArray = (value, index, arr) => {
@@ -255,7 +266,7 @@ let make = _ => {
        |> Array.of_list
        |> React.array}
     </SpaceStation>
-    <div> {React.string(totalTimeTaken)} </div>
+    <TimeTaken label=totalTimeTaken />
     <FindFalcone disabled={!isReadyToLaunch} onClick=launchVehicles />
   </Lengaburu>;
 };
