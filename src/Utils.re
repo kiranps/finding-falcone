@@ -1,5 +1,10 @@
 [@bs.val] external require: string => unit = "require";
 
+let updateArray = (value, index, arr) => {
+  arr[index] = value;
+  arr;
+};
+
 let difference = (array, values) =>
   List.filter(elem => !List.mem(elem, values), array);
 

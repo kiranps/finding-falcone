@@ -1,8 +1,6 @@
 open Js.Promise;
-type mission = {
-  vehicle: option(string),
-  planet: string,
-};
+open Mission;
+open Utils;
 
 module Lengaburu = {
   [@react.component]
@@ -38,41 +36,6 @@ module FindFalcone = {
 
     <button className onClick> {React.string("Find Falcone")} </button>;
   };
-};
-
-let updateArray = (value, index, arr) => {
-  arr[index] = value;
-  arr;
-};
-
-let getValueOrDefault = (dict, key, default) =>
-  switch (Js.Dict.get(dict, key)) {
-  | Some(value) => value
-  | None => default
-  };
-
-let updateCounter = (dict, key) => {
-  let count =
-    switch (Js.Dict.get(dict, key)) {
-    | Some(value) => value
-    | None => 0
-    };
-  Js.Dict.set(dict, key, count + 1);
-  Some(dict);
-};
-
-let vehiclesUsed = (missions, key) => {
-  missions
-  |> List.fold_left(
-       (dict, mission) =>
-         mission
-         |> Belt.Option.flatMap(_, mission => mission.vehicle)
-         |> Belt.Option.flatMap(_, updateCounter(dict))
-         |> Belt.Option.getWithDefault(_, dict),
-       Js.Dict.empty(),
-     )
-  |> Js.Dict.get(_, key)
-  |> Belt.Option.getWithDefault(_, 0);
 };
 
 [@react.component]
@@ -117,14 +80,7 @@ let make = _ => {
   let isReadyToLaunch =
     missions
     |> List.for_all(mission =>
-         switch (mission) {
-         | Some(mission) =>
-           switch (mission.vehicle) {
-           | Some(vehicle) => true
-           | None => false
-           }
-         | None => false
-         }
+         Belt.Option.(mapWithDefault(mission, false, x => isSome(x.vehicle)))
        );
 
   let launchVehicles = _ => {
@@ -239,11 +195,11 @@ let make = _ => {
                         name={vehicle.name}
                         count={
                           vehicle.total_no
-                          - vehiclesUsed(missions, vehicle.name)
+                          - Mission.vehiclesUsed(missions, vehicle.name)
                         }
                         disable={
                           vehicle.total_no
-                          - vehiclesUsed(missions, vehicle.name) == 0
+                          - Mission.vehiclesUsed(missions, vehicle.name) == 0
                           || vehicle.max_distance
                           < Planet.distance(mission.planet, planets)
                         }
