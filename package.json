@@ -14,17 +14,25 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@glennsl/bs-jest": "^0.4.8",
     "@glennsl/bs-json": "^4.0.0",
+    "@testing-library/dom": "^5.2.0",
+    "@testing-library/react": "^8.0.1",
     "bs-css": "^8.0.4",
+    "bs-dom-testing-library": "^0.4.1",
     "bs-fetch": "^0.4.0",
+    "bs-jest-dom": "^2.0.1",
+    "bs-react-testing-library": "^0.5.0",
+    "bs-webapi": "^0.15.2",
+    "jest": "^24.8.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.3",
+    "@fullhuman/postcss-purgecss": "^1.2.0",
     "bs-platform": "^5.0.4",
-    "tailwindcss": "^1.0.4",
-    "@fullhuman/postcss-purgecss": "^1.2.0"
+    "parcel-bundler": "^1.12.3",
+    "tailwindcss": "^1.0.4"
   }
 }
