@@ -6,7 +6,7 @@ let make = _ => {
   let planet = Utils.qsGet("planet");
   let time = Utils.qsGet("time");
 
-  <div className="text-center">
+  <div className="text-center flex flex-col justify-center items-center pt-40">
     {switch (status) {
      | Some("success") =>
        <div>
