@@ -1,9 +1,6 @@
 open Jest;
 open Expect;
-open JestDom;
 open ReactTestingLibrary;
-open Webapi.Dom;
-open Webapi.Dom.Element;
 
 [@bs.get] external firstChild: Dom.element => Dom.element = "";
 [@bs.get] external innerHTML: Dom.element => string = "";

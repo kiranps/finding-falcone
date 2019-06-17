@@ -25,7 +25,7 @@ let make = _ => {
          </div>
        </div>
      | Some("failed") => <div> {React.string("Failed!")} </div>
-     | None =>
+     | _ =>
        <div> {React.string("Error! Something Unexpected happened")} </div>
      }}
     <a href="#/home" className="btn-blue"> {React.string("Start Again")} </a>

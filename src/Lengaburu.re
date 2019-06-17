@@ -88,51 +88,51 @@ let make = _ => {
       planet_names: [],
       vehicle_names: [],
     };
-    missions
-    |> List.fold_left(
-         (payload: Falcone.payload, mission) =>
-           switch (mission) {
-           | Some(mission) =>
-             switch (mission.vehicle) {
-             | Some(vehicle) => {
-                 vehicle_names: [vehicle, ...payload.vehicle_names],
-                 planet_names: [mission.planet, ...payload.planet_names],
-               }
+    let _ =
+      missions
+      |> List.fold_left(
+           (payload: Falcone.payload, mission) =>
+             switch (mission) {
+             | Some(mission) =>
+               switch (mission.vehicle) {
+               | Some(vehicle) => {
+                   vehicle_names: [vehicle, ...payload.vehicle_names],
+                   planet_names: [mission.planet, ...payload.planet_names],
+                 }
 
+               | None => payload
+               }
              | None => payload
-             }
-           | None => payload
-           },
-         initialPayload,
-       )
-    |> (
-      payload =>
-        Falcone.Api.findFalcone(payload)
-        |> then_(json =>
-             json
-             |> (
-               (json: Falcone.payloadResult) =>
-                 (
-                   switch (json.status) {
-                   | "success" =>
-                     switch (json.planet_name) {
-                     | Some(planet) =>
-                       ReasonReactRouter.push(
-                         "#/result?status=success&planet="
-                         ++ planet
-                         ++ "&time="
-                         ++ totalTimeTaken,
-                       )
-                     | None => ()
+             },
+           initialPayload,
+         )
+      |> (
+        payload =>
+          Falcone.Api.findFalcone(payload)
+          |> then_(json =>
+               json
+               |> (
+                 (json: Falcone.payloadResult) =>
+                   (
+                     switch (json.status) {
+                     | "success" =>
+                       switch (json.planet_name) {
+                       | Some(planet) =>
+                         ReasonReactRouter.push(
+                           "#/result?status=success&planet="
+                           ++ planet
+                           ++ "&time="
+                           ++ totalTimeTaken,
+                         )
+                       | None => ()
+                       }
+                     | _ => ReasonReactRouter.push("#/result?status=failed")
                      }
-                   | "false" =>
-                     ReasonReactRouter.push("#/result?status=failed")
-                   }
-                 )
-                 |> resolve
+                   )
+                   |> resolve
+               )
              )
-           )
-    );
+      );
     ();
   };
 
