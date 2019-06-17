@@ -6,9 +6,9 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "server": "parcel src/index.html",
-    "parcel:production": "parcel build src/index.html",
+    "parcel:production": "yarn build && parcel build src/index.html",
     "predeploy": "parcel build src/index.html",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "BuckleScript"
