@@ -6,7 +6,9 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "server": "parcel src/index.html",
-    "parcel:production": "parcel build src/index.html"
+    "parcel:production": "parcel build src/index.html",
+    "predeploy": "parcel build src/index.html",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [
     "BuckleScript"
@@ -33,6 +35,7 @@
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "bs-platform": "^5.0.4",
     "parcel-bundler": "^1.12.3",
+    "gh-pages": "^2.0.1",
     "tailwindcss": "^1.0.4"
   }
 }
