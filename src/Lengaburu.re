@@ -51,29 +51,28 @@ let getValueOrDefault = (dict, key, default) =>
   | None => default
   };
 
+let updateCounter = (dict, key) => {
+  let count =
+    switch (Js.Dict.get(dict, key)) {
+    | Some(value) => value
+    | None => 0
+    };
+  Js.Dict.set(dict, key, count + 1);
+  Some(dict);
+};
+
 let vehiclesUsed = (missions, key) => {
-  let counter = Js.Dict.empty();
-  let _ =
-    missions
-    |> List.iter(mission =>
-         switch (mission) {
-         | Some(mission) =>
-           switch (mission.vehicle) {
-           | Some(vehicle) =>
-             Js.Dict.set(
-               counter,
-               vehicle,
-               getValueOrDefault(counter, vehicle, 0) + 1,
-             )
-           | None => ()
-           }
-         | None => ()
-         }
-       );
-  switch (Js.Dict.get(counter, key)) {
-  | Some(int) => int
-  | None => 0
-  };
+  missions
+  |> List.fold_left(
+       (dict, mission) =>
+         mission
+         |> Belt.Option.flatMap(_, mission => mission.vehicle)
+         |> Belt.Option.flatMap(_, updateCounter(dict))
+         |> Belt.Option.getWithDefault(_, dict),
+       Js.Dict.empty(),
+     )
+  |> Js.Dict.get(_, key)
+  |> Belt.Option.getWithDefault(_, 0);
 };
 
 [@react.component]
