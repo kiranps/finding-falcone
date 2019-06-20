@@ -9,31 +9,32 @@ module Input = {
       onBlur
       onChange
       type_="text"
-      placeholder="select"
-      className="bg-red-100 outline-none w-full cursor-pointer focus:cursor-text"
+      placeholder="select vehicle"
+      className="h-8 bg-gray-100 shadow-md text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
     />;
 };
 
 module Menu = {
-  module Item = {
-    [@react.component]
-    let make = (~value, ~onClick) =>
-      <div className="cursor-pointer hover:bg-blue-300" onClick>
-        {React.string(value)}
-      </div>;
-  };
-
   [@react.component]
   let make = (~children, ~hide) =>
     hide
-      ? <div className="absolute bg-green-200 w-full z-10"> children </div>
+      ? <div className="absolute shadow-md bg-white w-full z-10">
+          children
+        </div>
       : React.null;
+  module Item = {
+    [@react.component]
+    let make = (~value, ~onClick) =>
+      <div className="cursor-pointer text-sm px-2 hover:bg-gray-200" onClick>
+        {React.string(value)}
+      </div>;
+  };
 };
 
 module Box = {
   [@react.component]
   let make = (~children) =>
-    <div className="inline-block relative bg-green-100 w-40"> children </div>;
+    <div className="inline-block relative bg-white w-full"> children </div>;
 };
 module Container = {
   [@react.component]

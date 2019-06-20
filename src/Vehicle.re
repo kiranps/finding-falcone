@@ -27,12 +27,17 @@ module Api = {
 [@react.component]
 let make = (~name, ~count, ~disable, ~selected, ~onClick) => {
   let className =
-    disable ? "cursor-move pointer-events-none opacity-25" : "cursor-pointer";
+    "my-2 pl-1 text-sm "
+    ++ (
+      disable ? "cursor-move pointer-events-none opacity-25" : "cursor-pointer"
+    );
 
   <div className onClick>
     <Icon.Radio active=selected />
-    <span> {React.string(name)} </span>
-    <span> {React.string(" ( " ++ string_of_int(count) ++ " )")} </span>
+    <span className="align-middle pl-1"> {React.string(name)} </span>
+    <span className="align-middle">
+      {React.string(" ( " ++ string_of_int(count) ++ " )")}
+    </span>
   </div>;
 };
 

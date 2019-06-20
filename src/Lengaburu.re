@@ -5,24 +5,28 @@ open Utils;
 module Lengaburu = {
   [@react.component]
   let make = (~children) =>
-    <div className="flex flex-col justify-center items-center pt-40">
+    <div
+      className="flex flex-col min-h-screen pt-12 pb-12 items-center justify-center">
       children
     </div>;
 };
 module SpaceStation = {
   [@react.component]
-  let make = (~children) => <div className="flex h-40 w-3/4"> children </div>;
+  let make = (~children) =>
+    <div className="flex flex-wrap w-3/4 mx-auto justify-center">
+      children
+    </div>;
 };
 
 module LaunchPad = {
   [@react.component]
-  let make = (~children) => <div className="flex-1"> children </div>;
+  let make = (~children) => <div className="h-48 m-4"> children </div>;
 };
 
 module TimeTaken = {
   [@react.component]
   let make = (~label) =>
-    <div className="text-center h-12">
+    <div className="text-center my-6">
       {React.string("Time taken " ++ string_of_int(label))}
     </div>;
 };
