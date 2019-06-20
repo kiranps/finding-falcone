@@ -98,3 +98,16 @@ let launchVehicles = (missions, timeTaken) => {
     );
   ();
 };
+
+let remainingPlanets = (missions, planets) =>
+  Utils.difference(
+    List.map((planet: Planet.t) => planet.name, planets),
+    missions
+    |> List.filter(x => x !== None)
+    |> List.map(mission =>
+         switch (mission) {
+         | Some(mission) => mission.planet
+         | None => ""
+         }
+       ),
+  );

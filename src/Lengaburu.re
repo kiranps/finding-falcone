@@ -84,18 +84,7 @@ let make = _ => {
     ();
   };
 
-  let remainingPlanets =
-    Utils.difference(
-      List.map((planet: Planet.t) => planet.name, planets),
-      missions
-      |> List.filter(x => x !== None)
-      |> List.map(mission =>
-           switch (mission) {
-           | Some(mission) => mission.planet
-           | None => ""
-           }
-         ),
-    );
+  let remainingPlanets = Mission.remainingPlanets(missions, planets);
 
   let totalTimeTaken = Mission.totalTimeTaken(missions, vehicles, planets);
 
