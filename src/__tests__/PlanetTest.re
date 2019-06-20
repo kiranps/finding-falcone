@@ -1,12 +1,6 @@
 open Jest;
 open Planet;
 
-let logger: 'a => 'a =
-  value => {
-    Js.log(value);
-    value;
-  };
-
 describe("Planet", () => {
   open Expect;
 
