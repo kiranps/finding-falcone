@@ -9,6 +9,12 @@ yarn start
 yarn server
 ```
 
+### Run Tests
+
+```sh
+yarn jest
+```
+
 ## Build for Production
 
 ```sh
