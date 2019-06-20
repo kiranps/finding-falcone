@@ -1,7 +1,7 @@
 open Jest;
 open Falcone;
 
-describe("Planet", () => {
+describe("Falcone", () => {
   open Expect;
 
   let token = "ulqxJnjaxTPIBVSfcYaqRJBhhUOBwIsd";

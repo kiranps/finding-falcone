@@ -23,7 +23,7 @@ module TimeTaken = {
   [@react.component]
   let make = (~label) =>
     <div className="text-center h-12">
-      {React.string("Time taken " ++ label)}
+      {React.string("Time taken " ++ string_of_int(label))}
     </div>;
 };
 

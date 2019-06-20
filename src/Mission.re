@@ -29,7 +29,12 @@ let isReadyToLaunch = missions =>
   |> List.for_all(mission =>
        Belt.Option.(mapWithDefault(mission, false, x => isSome(x.vehicle)))
      );
-let totalTimeTaken = (missions, vehicles, planets) =>
+
+let logger = x => {
+  Js.log(x);
+  x;
+};
+let totalTimeTaken = (missions, vehicles, planets) => {
   missions
   |> List.fold_left(
        (total, mission) =>
@@ -47,8 +52,8 @@ let totalTimeTaken = (missions, vehicles, planets) =>
          | None => total
          },
        0,
-     )
-  |> string_of_int;
+     );
+};
 let launchVehicles = (missions, timeTaken) => {
   let initialPayload: Falcone.payload = {planet_names: [], vehicle_names: []};
   let _ =
@@ -85,7 +90,7 @@ let launchVehicles = (missions, timeTaken) => {
                          "#/result?status=success&planet="
                          ++ planet
                          ++ "&time="
-                         ++ timeTaken,
+                         ++ string_of_int(timeTaken),
                        )
                      | None => ()
                      }

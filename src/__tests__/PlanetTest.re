@@ -1,19 +1,16 @@
 open Jest;
 open Planet;
 
-describe("Planet", () => {
-  open Expect;
+let planets = [
+  {name: "Donlon", distance: 100},
+  {name: "Enchai", distance: 200},
+  {name: "Jebing", distance: 300},
+  {name: "Sapir", distance: 400},
+  {name: "Lerbin", distance: 500},
+  {name: "Pingasor", distance: 600},
+];
 
-  let planets = [
-    {name: "Donlon", distance: 100},
-    {name: "Enchai", distance: 200},
-    {name: "Jebing", distance: 300},
-    {name: "Sapir", distance: 400},
-    {name: "Lerbin", distance: 500},
-    {name: "Pingasor", distance: 600},
-  ];
-
-  let planetsRaw: string = {|
+let planetsRaw: string = {|
     [
      {"name": "Donlon", "distance": 100},
      {"name": "Enchai", "distance": 200},
@@ -23,6 +20,9 @@ describe("Planet", () => {
      {"name": "Pingasor", "distance": 600}
     ]
   |};
+
+describe("Planet", () => {
+  open Expect;
 
   test("find distance to Donlon", () =>
     planets |> distance("Donlon") |> expect |> toBe(100)
