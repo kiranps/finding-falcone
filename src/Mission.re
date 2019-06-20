@@ -1,3 +1,4 @@
+open Js.Promise;
 type t = {
   vehicle: option(string),
   planet: string,
@@ -21,4 +22,79 @@ let vehiclesUsed = (missions, key) => {
      )
   |> Js.Dict.get(_, key)
   |> Belt.Option.getWithDefault(_, 0);
+};
+
+let isReadyToLaunch = missions =>
+  missions
+  |> List.for_all(mission =>
+       Belt.Option.(mapWithDefault(mission, false, x => isSome(x.vehicle)))
+     );
+let totalTimeTaken = (missions, vehicles, planets) =>
+  missions
+  |> List.fold_left(
+       (total, mission) =>
+         switch (mission) {
+         | Some(mission) =>
+           switch (mission.vehicle) {
+           | Some(vehicle) =>
+             switch (Vehicle.speed(vehicle, vehicles)) {
+             | Some(speed) =>
+               total + Planet.distance(mission.planet, planets) / speed
+             | None => total
+             }
+           | None => total
+           }
+         | None => total
+         },
+       0,
+     )
+  |> string_of_int;
+let launchVehicles = (missions, timeTaken) => {
+  let initialPayload: Falcone.payload = {planet_names: [], vehicle_names: []};
+  let _ =
+    missions
+    |> List.fold_left(
+         (payload: Falcone.payload, mission) =>
+           switch (mission) {
+           | Some(mission) =>
+             switch (mission.vehicle) {
+             | Some(vehicle) => {
+                 vehicle_names: [vehicle, ...payload.vehicle_names],
+                 planet_names: [mission.planet, ...payload.planet_names],
+               }
+
+             | None => payload
+             }
+           | None => payload
+           },
+         initialPayload,
+       )
+    |> (
+      payload =>
+        Falcone.Api.findFalcone(payload)
+        |> then_(json =>
+             json
+             |> (
+               (json: Falcone.payloadResult) =>
+                 (
+                   switch (json.status) {
+                   | "success" =>
+                     switch (json.planet_name) {
+                     | Some(planet) =>
+                       ReasonReactRouter.push(
+                         "#/result?status=success&planet="
+                         ++ planet
+                         ++ "&time="
+                         ++ timeTaken,
+                       )
+                     | None => ()
+                     }
+                   | _ => ReasonReactRouter.push("#/result?status=failed")
+                   }
+                 )
+                 |> resolve
+             )
+           )
+    );
+  ();
 };
