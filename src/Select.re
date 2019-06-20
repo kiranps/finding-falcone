@@ -25,7 +25,9 @@ module Menu = {
   module Item = {
     [@react.component]
     let make = (~value, ~onClick) =>
-      <div className="cursor-pointer text-sm px-2 hover:bg-gray-200" onClick>
+      <div
+        className="cursor-pointer vertial-align-middle h-8 text-sm align-content-center leading-loose px-2 hover:bg-gray-200"
+        onClick>
         {React.string(value)}
       </div>;
   };
