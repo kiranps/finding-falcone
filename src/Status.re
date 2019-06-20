@@ -28,10 +28,13 @@ let make = _ => {
               )}
            </div>
          </div>
-       | Some("failed") => <div> {React.string("Failed!")} </div>
+       | Some("failed") =>
+         <div>
+           {React.string("Failed! King Shan will send you to his coal mine")}
+         </div>
        | _ =>
          <div className="mt-2">
-           {React.string("Failed! King Shan will send you to his coal mine")}
+           {React.string("Failed! Something Unexpected happened! Try Again")}
          </div>
        }}
       <a href="#/home" className="btn-blue mt-4">

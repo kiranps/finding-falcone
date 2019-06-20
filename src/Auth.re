@@ -7,7 +7,7 @@ module Decode = {
 module Api = {
   let fetchToken = () =>
     Js.Promise.(
-      Http.post("https://findfalcone.herokuapp.com/token", Js.Json.null)
+      Http.post(Config.Api.baseUrl ++ "/token", Js.Json.null)
       |> then_(json => json |> Decode.token |> resolve)
     );
 };

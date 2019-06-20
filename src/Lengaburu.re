@@ -35,8 +35,11 @@ module FindFalcone = {
   [@react.component]
   let make = (~disabled, ~onClick) => {
     let className =
-      disabled
-        ? "btn-blue pointer-events-none opacity-25" : "btn-blue outline-none";
+      "mb-8 "
+      ++ (
+        disabled
+          ? "btn-blue pointer-events-none opacity-25" : "btn-blue outline-none"
+      );
 
     <button className onClick> {React.string("Find Falcone")} </button>;
   };

@@ -38,7 +38,7 @@ module Api = {
            |> Encode.falconePayload(json.token)
            |> (
              data =>
-               Http.post("https://findfalcone.herokuapp.com/find", data)
+               Http.post(Config.Api.baseUrl ++ "/find", data)
                |> then_(json => json |> Decode.payload |> resolve)
            )
          )

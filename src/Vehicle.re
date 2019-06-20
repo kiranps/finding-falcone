@@ -19,7 +19,7 @@ module Decode = {
 module Api = {
   let fetchVehicles = () =>
     Js.Promise.(
-      Http.get("https://findfalcone.herokuapp.com/vehicles")
+      Http.get(Config.Api.baseUrl ++ "/vehicles")
       |> then_(json => json |> Decode.vehicleList |> resolve)
     );
 };
