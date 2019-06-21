@@ -3,14 +3,14 @@
 exports[`Select works 1`] = `
 <div>
   <div
-    class="inline-block relative bg-green-100 w-40"
+    class="inline-block relative bg-white w-full"
   >
     <div
       class="block w-full"
     >
       <input
-        class="bg-red-100 outline-none w-full cursor-pointer focus:cursor-text"
-        placeholder="select"
+        class="h-8 bg-gray-100 shadow-md text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
+        placeholder="select vehicle"
         type="text"
         value=""
       />

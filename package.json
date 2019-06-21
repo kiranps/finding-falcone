@@ -6,6 +6,8 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "server": "parcel src/index.html",
+    "test": "yarn build && jest",
+    "test:watch": "jest --watchAll",
     "parcel:production": "yarn build && parcel build src/index.html",
     "predeploy": "parcel build src/index.html",
     "deploy": "gh-pages -d dist"

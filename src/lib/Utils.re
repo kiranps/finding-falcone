@@ -25,6 +25,6 @@ let qsGet = key =>
     value =>
       switch (value) {
       | Some(Single(s)) => Some(s)
-      | None => None
+      | _ => None
       }
   );

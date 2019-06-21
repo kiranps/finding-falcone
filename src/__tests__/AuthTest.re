@@ -4,8 +4,6 @@ open Auth;
 describe("Auth", () => {
   open Expect;
 
-  let token = {token: "1234"};
-
   let tokenRaw: string = {|
      {"token": "1234"}
   |};
