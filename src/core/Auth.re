@@ -7,7 +7,7 @@ module Decode = {
 module Api = {
   let fetchToken = () =>
     Js.Promise.(
-      Http.post(Config.Api.baseUrl ++ "/token", Js.Json.null)
+      Http.post(Config.baseUrl ++ "/token", Js.Json.null)
       |> then_(json => json |> Decode.token |> resolve)
     );
 };

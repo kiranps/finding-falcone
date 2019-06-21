@@ -9,7 +9,7 @@ let make = () => {
     {switch (route) {
      | [""] => <Lengaburu />
      | ["", "home"] => <Lengaburu />
-     | ["", "result"] => <Status />
+     | ["", "result"] => <Result />
      | _ => <NotFound />
      }}
     <Footer />

@@ -19,7 +19,7 @@ module Decode = {
 module Api = {
   let fetchVehicles = () =>
     Js.Promise.(
-      Http.get(Config.Api.baseUrl ++ "/vehicles")
+      Http.get(Config.baseUrl ++ "/vehicles")
       |> then_(json => json |> Decode.vehicleList |> resolve)
     );
 };

@@ -16,7 +16,7 @@ module Decode = {
 module Api = {
   let fetchPlanets = () =>
     Js.Promise.(
-      Http.get(Config.Api.baseUrl ++ "/planets")
+      Http.get(Config.baseUrl ++ "/planets")
       |> then_(json => json |> Decode.planetList |> resolve)
     );
 };

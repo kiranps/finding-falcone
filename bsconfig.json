@@ -5,7 +5,8 @@
   },
   "sources": [
     {
-      "dir": "src"
+      "dir": "src",
+      "subdirs": ["components", "lib", "pages", "core"]
     },
     {
       "dir": "src/__tests__",

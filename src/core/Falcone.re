@@ -38,7 +38,7 @@ module Api = {
            |> Encode.falconePayload(json.token)
            |> (
              data =>
-               Http.post(Config.Api.baseUrl ++ "/find", data)
+               Http.post(Config.baseUrl ++ "/find", data)
                |> then_(json => json |> Decode.payload |> resolve)
            )
          )
