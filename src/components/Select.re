@@ -17,11 +17,11 @@ module Input = {
 module Menu = {
   [@react.component]
   let make = (~children, ~hide) =>
-    hide
-      ? <div className="absolute shadow-md bg-white w-full z-10">
-          children
-        </div>
-      : React.null;
+    hide ?
+      <div className="absolute shadow-md bg-white w-full z-10">
+        children
+      </div> :
+      React.null;
   module Item = {
     [@react.component]
     let make = (~value, ~onClick) =>
@@ -53,18 +53,14 @@ let make = (~values: list(string), ~onChange) => {
     changeValue(value => active ? value : "");
   };
 
-  let handleChange = e => {
-    ReactEvent.Form.target(e)##value |> changeValue;
-  };
+  let handleChange = e => ReactEvent.Form.target(e)##value |> changeValue;
 
   /*
     setTimeout is for avoiding clash btw onBlur and onClick
     onBlur remove Menu from dom on which onClick is register
     thus preventing onClick beign triggered
    */
-  let handleBlur = _e => {
-    setTimeout(() => toggleActive(_ => false), 200);
-  };
+  let handleBlur = _e => setTimeout(() => toggleActive(_ => false), 200);
 
   let handleSelect = value => {
     changeValue(_ => value);
@@ -80,17 +76,24 @@ let make = (~values: list(string), ~onChange) => {
         onChange=handleChange
       />
       <Menu hide=active>
-        {values
-         |> List.filter(Js.String.startsWith(value))
-         |> List.mapi((i, x) =>
-              <Menu.Item
-                key={string_of_int(i)}
-                value=x
-                onClick={_e => handleSelect(x)}
-              />
-            )
-         |> Array.of_list
-         |> React.array}
+        {
+          values
+          |> List.filter(x =>
+               Js.String.startsWith(
+                 Js.String.toLowerCase(value),
+                 Js.String.toLowerCase(x),
+               )
+             )
+          |> List.mapi((i, x) =>
+               <Menu.Item
+                 key={string_of_int(i)}
+                 value=x
+                 onClick={_e => handleSelect(x)}
+               />
+             )
+          |> Array.of_list
+          |> React.array
+        }
       </Menu>
     </Container>
   </Box>;
