@@ -1,4 +1,5 @@
 [@bs.val] external require: string => unit = "require";
+[@bs.val] external src: string => string = "require";
 
 let updateArray = (value, index, arr) => {
   arr[index] = value;

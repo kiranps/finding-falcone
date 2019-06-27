@@ -10,7 +10,7 @@ module Input = {
       onChange
       type_="text"
       placeholder="select vehicle"
-      className="h-8 bg-gray-100 shadow-md text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
+      className="h-8 bg-gray-100 shadow-sm text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
     />;
 };
 

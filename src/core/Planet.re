@@ -21,7 +21,7 @@ module Api = {
     );
 };
 
-let distance = (planet, planets) => {
+let distance = (planet, planets) =>
   planets
   |> List.find(x => x.name === planet)
   |> (
@@ -31,4 +31,19 @@ let distance = (planet, planets) => {
       | exception Not_found => 0
       }
   );
-};
+
+[@react.component]
+let make = (~name=?, ~planets, ~onChange) =>
+  <div className="w-full rounded shadow bg-teal-400">
+    {
+      switch (name) {
+      | Some(planet) =>
+        <img
+          className="h-32 p-4 m-auto"
+          src={"/images/" ++ planet ++ ".png"}
+        />
+      | None => <img className="h-32 p-4 m-auto" src="/images/Donlon.png" />
+      }
+    }
+    <Select values=planets onChange />
+  </div>;

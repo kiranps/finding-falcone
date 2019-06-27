@@ -27,13 +27,17 @@ module Api = {
 [@react.component]
 let make = (~name, ~count, ~disable, ~selected, ~onClick) => {
   let className =
-    "my-2 pl-1 text-sm "
+    "p-2 cursor-pointer text-sm border-b border-gray-500"
     ++ (
       disable ? "cursor-move pointer-events-none opacity-25" : "cursor-pointer"
-    );
+    )
+    ++ (selected ? " bg-teal-300 opacity-100 " : "");
 
   <div className onClick>
-    <Icon.Radio active=selected />
+    <img
+      className="h-6 w-6 m-auto inline-block"
+      src={"/images/" ++ name ++ ".png"}
+    />
     <span className="align-middle pl-1"> {React.string(name)} </span>
     <span className="align-middle">
       {React.string(" ( " ++ string_of_int(count) ++ " )")}
@@ -41,7 +45,7 @@ let make = (~name, ~count, ~disable, ~selected, ~onClick) => {
   </div>;
 };
 
-let speed = (vehicleName, vehicles) => {
+let speed = (vehicleName, vehicles) =>
   vehicles
   |> List.find(x => x.name === vehicleName)
   |> (
@@ -51,4 +55,3 @@ let speed = (vehicleName, vehicles) => {
       | exception Not_found => None
       }
   );
-};
