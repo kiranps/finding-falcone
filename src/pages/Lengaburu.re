@@ -38,15 +38,25 @@ module TimeTaken = {
     </div>;
 };
 
+module Counter = {
+  [@react.component]
+  let make = (~value) =>
+    <div className="font-bold antialiased text-gray-700">
+      {
+        "Select any "
+        ++ (value |> string_of_int)
+        ++ " Planets and Vehicle to start mission"
+        |> React.string
+      }
+    </div>;
+};
+
 module FindFalcone = {
   [@react.component]
-  let make = (~disabled, ~onClick) => {
-    let className =
-      "mb-8 "
-      ++ (disabled ? "btn pointer-events-none opacity-25" : "btn outline-none");
-
-    <button className onClick> {React.string("Find Falcone")} </button>;
-  };
+  let make = (~onClick) =>
+    <button className="btn mb-8 outline-none" onClick>
+      {React.string("Find Falcone")}
+    </button>;
 };
 
 [@react.component]
@@ -97,9 +107,17 @@ let make = _ => {
 
   let totalTimeTaken = Mission.totalTimeTaken(missions, vehicles, planets);
 
-  let isReadyToLaunch = isReadyToLaunch(missions);
-
   let launchVehicles = _ => Mission.launchVehicles(missions, totalTimeTaken);
+
+  let validMissionCount =
+    missions
+    |> List.filter(mission =>
+         mission
+         |> Belt.Option.flatMap(_, mission => mission.vehicle)
+         |> Belt.Option.getWithDefault(None)
+         |> Belt.Option.isSome
+       )
+    |> List.length;
 
   <Lengaburu>
     <SpaceStation>
@@ -171,6 +189,10 @@ let make = _ => {
       }
     </SpaceStation>
     <TimeTaken label=totalTimeTaken />
-    <FindFalcone disabled={!isReadyToLaunch} onClick=launchVehicles />
+    {
+      validMissionCount == 4 ?
+        <FindFalcone onClick=launchVehicles /> :
+        <Counter value={4 - validMissionCount} />
+    }
   </Lengaburu>;
 };

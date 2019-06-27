@@ -9,7 +9,7 @@ exports[`Select works 1`] = `
       class="block w-full"
     >
       <input
-        class="h-8 bg-gray-100 shadow-md text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
+        class="h-8 bg-gray-100 shadow-sm text-sm outline-none w-full px-2 cursor-pointer focus:cursor-text"
         placeholder="select vehicle"
         type="text"
         value=""

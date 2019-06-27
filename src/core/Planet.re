@@ -42,7 +42,11 @@ let make = (~name=?, ~planets, ~onChange) =>
           className="h-32 p-4 m-auto"
           src={"/images/" ++ planet ++ ".png"}
         />
-      | None => <img className="h-32 p-4 m-auto" src="/images/Donlon.png" />
+      | None =>
+        <img
+          className="h-32 p-4 m-auto opacity-25"
+          src="/images/placeholder.png"
+        />
       }
     }
     <Select values=planets onChange />
