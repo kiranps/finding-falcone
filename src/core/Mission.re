@@ -10,7 +10,7 @@ let updateCounter = (dict, key) => {
   Some(dict);
 };
 
-let vehiclesUsed = (missions, key) => {
+let vehiclesUsed = (missions, key) =>
   missions
   |> List.fold_left(
        (dict, mission) =>
@@ -22,7 +22,6 @@ let vehiclesUsed = (missions, key) => {
      )
   |> Js.Dict.get(_, key)
   |> Belt.Option.getWithDefault(_, 0);
-};
 
 let isReadyToLaunch = missions =>
   missions
@@ -34,7 +33,7 @@ let logger = x => {
   Js.log(x);
   x;
 };
-let totalTimeTaken = (missions, vehicles, planets) => {
+let totalTimeTaken = (missions, vehicles, planets) =>
   missions
   |> List.fold_left(
        (total, mission) =>
@@ -53,7 +52,6 @@ let totalTimeTaken = (missions, vehicles, planets) => {
          },
        0,
      );
-};
 let launchVehicles = (missions, timeTaken) => {
   let initialPayload: Falcone.payload = {planet_names: [], vehicle_names: []};
   let _ =
@@ -116,3 +114,13 @@ let remainingPlanets = (missions, planets) =>
          }
        ),
   );
+
+let validMissionCount = missions =>
+  missions
+  |> List.filter(mission =>
+       mission
+       |> Belt.Option.flatMap(_, mission => mission.vehicle)
+       |> Belt.Option.getWithDefault(None)
+       |> Belt.Option.isSome
+     )
+  |> List.length;

@@ -51,6 +51,10 @@ describe("Mission", () => {
     Mission.isReadyToLaunch(missions2) |> expect |> ExpectJs.toBeTruthy
   );
 
+  test("find count to valid missions", () =>
+    Mission.validMissionCount(missions1) |> expect |> toBe(3)
+  );
+
   test("total time taken for the mission should be 240", () =>
     Mission.totalTimeTaken(
       missions2,

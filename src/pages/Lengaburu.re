@@ -109,15 +109,7 @@ let make = _ => {
 
   let launchVehicles = _ => Mission.launchVehicles(missions, totalTimeTaken);
 
-  let validMissionCount =
-    missions
-    |> List.filter(mission =>
-         mission
-         |> Belt.Option.flatMap(_, mission => mission.vehicle)
-         |> Belt.Option.getWithDefault(None)
-         |> Belt.Option.isSome
-       )
-    |> List.length;
+  let validMissionCount = Mission.validMissionCount(missions);
 
   <Lengaburu>
     <SpaceStation>

@@ -9,7 +9,7 @@
       "subdirs": ["components", "lib", "pages", "core"]
     },
     {
-      "dir": "src/__tests__",
+      "dir": "__tests__",
       "type": "dev"
     }
   ],
